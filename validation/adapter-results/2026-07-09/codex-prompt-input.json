@@ -1,0 +1,23 @@
+{
+  "output": "/tmp/agent-path-topology-litmus-codex-20260709",
+  "results": [
+    {
+      "evidence": {
+        "command": "codex debug prompt-input",
+        "expected_behavior": "when run inside a submodule, report whether superproject instructions remain visible",
+        "json_valid": true,
+        "returncode": 0,
+        "stderr": "",
+        "submodule_rule_visible": true,
+        "superproject_rule_visible": false
+      },
+      "name": "codex-prompt-input",
+      "status": "FAIL"
+    }
+  ],
+  "summary": {
+    "fail": 1,
+    "pass": 0,
+    "skip": 0
+  }
+}
