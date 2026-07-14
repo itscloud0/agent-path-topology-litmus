@@ -1,6 +1,6 @@
 # Discoverability Review
 
-Status: `PASS` for release-candidate artifacts reviewed on 2026-07-11. Repository metadata remains pending until private publication.
+Status: `PASS` for public v0.1.0 artifacts reviewed on 2026-07-14. Repository description and topics are applied and match the reviewed discoverability terms.
 
 ## Search Intent
 
