@@ -8,6 +8,7 @@ from .core import (
     codex_prompt_input,
     create_and_validate,
     opencode_debug_skill,
+    opencode_worktree_submodule,
     render_json,
     render_markdown,
 )
@@ -24,7 +25,10 @@ def build_parser() -> argparse.ArgumentParser:
     validate.add_argument("--format", choices=["json", "markdown"], default="json")
 
     run_adapter = subparsers.add_parser("run-adapter", help="run a local client diagnostic adapter")
-    run_adapter.add_argument("adapter", choices=["codex-prompt-input", "opencode-debug-skill"])
+    run_adapter.add_argument(
+        "adapter",
+        choices=["codex-prompt-input", "opencode-debug-skill", "opencode-worktree-submodule"],
+    )
     run_adapter.add_argument("--output", type=Path, required=True, help="directory for disposable fixtures")
     run_adapter.add_argument("--format", choices=["json", "markdown"], default="json")
 
@@ -45,6 +49,8 @@ def main(argv: list[str] | None = None) -> int:
     elif args.command == "run-adapter":
         if args.adapter == "codex-prompt-input":
             results = [codex_prompt_input(args.output)]
+        elif args.adapter == "opencode-worktree-submodule":
+            results = [opencode_worktree_submodule(args.output)]
         else:
             results = [opencode_debug_skill(args.output)]
     else:
@@ -55,4 +61,3 @@ def main(argv: list[str] | None = None) -> int:
     else:
         print(render_json(results, args.output))
     return 1 if any(result.status == "FAIL" for result in results) else 0
-

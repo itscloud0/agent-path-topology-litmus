@@ -1,12 +1,13 @@
-# agent-path-topology-litmus v0.1.0
+# agent-path-topology-litmus v0.2.0
 
-Initial release candidate for reproducible coding-agent path-topology testing.
+Adds a reproducible fresh-worktree/submodule client diagnostic.
 
 ## Included
 
 - Six harmless fixtures covering symlinked skills, relative symlinks, git submodule instruction scope, git worktree/submodule state, ignore rules over submodules, and symlink-write targets.
 - JSON and Markdown baseline reports.
 - Non-live Codex CLI and opencode diagnostic adapters isolated from user-global configuration.
+- Non-live `opencode debug file list` validation that compares client file visibility with `git worktree list` and `git submodule status`.
 - Reproducible validation results with documented client failures and limitations.
 - Ubuntu and macOS CI for Python 3.10-3.12.
 

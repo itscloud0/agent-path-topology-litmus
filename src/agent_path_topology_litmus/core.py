@@ -275,6 +275,119 @@ def codex_prompt_input(output: Path) -> Result:
     )
 
 
+def parse_file_listing(stdout: str) -> tuple[bool, list[dict[str, object]]]:
+    try:
+        payload = json.loads(stdout)
+    except json.JSONDecodeError:
+        return False, []
+    if not isinstance(payload, list):
+        return False, []
+    entries = [entry for entry in payload if isinstance(entry, dict)]
+    return len(entries) == len(payload), entries
+
+
+def path_matches(path_value: object, expected: str) -> bool:
+    if not isinstance(path_value, str):
+        return False
+    normalized = path_value.replace("\\", "/").rstrip("/")
+    return normalized == expected or normalized.endswith(f"/{expected}")
+
+
+def opencode_worktree_submodule(output: Path) -> Result:
+    if shutil.which("opencode") is None:
+        return Result("opencode-worktree-submodule", "SKIP", {"reason": "opencode not found on PATH"})
+
+    worktree = output / "worktree-submodule-state" / "worktree-copy"
+    if not worktree.exists():
+        create_and_validate(output)
+
+    version_proc = run_command(["opencode", "--version"], worktree)
+    worktree_proc = run_command(["git", "worktree", "list", "--porcelain"], worktree)
+    submodule_proc = run_command(["git", "submodule", "status"], worktree)
+
+    isolated_home = output / "opencode-worktree-submodule-home"
+    isolated_home.mkdir(parents=True, exist_ok=True)
+    env = {
+        "HOME": str(isolated_home),
+        "XDG_CONFIG_HOME": str(isolated_home / ".config"),
+        "OPENCODE_DISABLE_EXTERNAL_SKILLS": "true",
+        "OPENCODE_DISABLE_CLAUDE_CODE_SKILLS": "true",
+    }
+    client_proc = run_command(
+        ["opencode", "debug", "file", "list", "deps", "--pure"],
+        worktree,
+        env=env,
+    )
+    client_json_valid, client_entries = parse_file_listing(client_proc.stdout)
+
+    worktree_lines = [line.strip() for line in worktree_proc.stdout.splitlines() if line.strip()]
+    listed_worktrees = [line.removeprefix("worktree ") for line in worktree_lines if line.startswith("worktree ")]
+    current_worktree_listed = any(
+        Path(path).resolve() == worktree.resolve() for path in listed_worktrees
+    )
+    submodule_lines = [line.strip() for line in submodule_proc.stdout.splitlines() if line.strip()]
+    module_status_line = next(
+        (line for line in submodule_lines if line.endswith(" deps/mod")),
+        "",
+    )
+    submodule_uninitialized = module_status_line.startswith("-")
+    client_submodule_directory_visible = any(
+        path_matches(entry.get("path"), "deps/mod") and entry.get("type") == "directory"
+        for entry in client_entries
+    )
+    client_submodule_file_visible = any(
+        path_matches(entry.get("path"), "deps/mod/mod.txt") for entry in client_entries
+    )
+
+    command_ok = (
+        version_proc.returncode == 0
+        and worktree_proc.returncode == 0
+        and submodule_proc.returncode == 0
+        and client_proc.returncode == 0
+        and client_json_valid
+    )
+    expected_state_observed = (
+        current_worktree_listed
+        and submodule_uninitialized
+        and client_submodule_directory_visible
+        and not client_submodule_file_visible
+    )
+    if not command_ok:
+        failure_class = "non_live_client_diagnostic_failed"
+    elif not current_worktree_listed:
+        failure_class = "fixture_worktree_missing_from_git_worktree_list"
+    elif not submodule_uninitialized:
+        failure_class = "fixture_submodule_not_marked_uninitialized"
+    elif not client_submodule_directory_visible:
+        failure_class = "submodule_directory_not_visible_in_client_listing"
+    elif client_submodule_file_visible:
+        failure_class = "uninitialized_submodule_content_visible_in_client_listing"
+    else:
+        failure_class = None
+
+    return Result(
+        "opencode-worktree-submodule",
+        "PASS" if command_ok and expected_state_observed else "FAIL",
+        {
+            "opencode_version": version_proc.stdout.strip(),
+            "command": "opencode debug file list deps --pure",
+            "cwd": str(worktree),
+            "isolated_home": str(isolated_home),
+            "git_worktree_list": worktree_lines,
+            "git_submodule_status": submodule_lines,
+            "client_listing": client_entries,
+            "git_worktree_current_listed": current_worktree_listed,
+            "git_submodule_uninitialized": submodule_uninitialized,
+            "client_submodule_directory_visible": client_submodule_directory_visible,
+            "client_submodule_file_visible": client_submodule_file_visible,
+            "failure_class": failure_class,
+            "stderr": client_proc.stderr.strip()[:1000],
+            "expected_behavior": "the client sees the fresh worktree's empty submodule directory without inventing submodule content",
+            "limitation": "This is a non-live file-list diagnostic; it does not prove model or tool behavior inside the submodule.",
+        },
+    )
+
+
 def parse_skill_names(stdout: str) -> tuple[bool, list[str]]:
     try:
         payload = json.loads(stdout)

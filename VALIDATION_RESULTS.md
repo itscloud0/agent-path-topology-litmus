@@ -77,3 +77,13 @@ Publication impact:
 - Reproducibility: `PASS`; adapters are isolated from user-global configuration and require no live model calls.
 - Documented failures: `PASS`; the Codex behavior failure is retained as evidence, while the earlier opencode harness failure is explicitly corrected.
 - Publication remains gated on final safety, packaging, discoverability, and remote CI verification.
+
+## 2026-07-17 Worktree/Submodule Diagnostic
+
+Lifecycle mode: `MAINTAIN` -> `RELEASE`.
+
+- `opencode 1.16.2 debug file list deps --pure` ran without a model call from the generated fresh worktree.
+- `git worktree list --porcelain` included the generated validation worktree.
+- `git submodule status` marked `deps/mod` uninitialized, and the client listed `deps/mod` as a directory without exposing `deps/mod/mod.txt`.
+- The adapter records the client version, exact Git observations, JSON file listing, failure class, isolated config paths, and the limitation that file listing does not prove model/tool behavior.
+- Local unit, compile, baseline, adapter, package-build/install, diff, and credential-scan checks passed before publication.

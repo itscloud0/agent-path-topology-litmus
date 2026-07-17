@@ -11,6 +11,7 @@ from agent_path_topology_litmus.cli import main
 from agent_path_topology_litmus.core import (
     codex_prompt_input,
     create_and_validate,
+    opencode_worktree_submodule,
     render_json,
     render_markdown,
     run_opencode_skill_variant,
@@ -74,6 +75,40 @@ class TopologyLitmusTests(unittest.TestCase):
 
             self.assertEqual(run.call_args.kwargs["env"], {"CODEX_HOME": str(output / ".litmus-codex-home")})
             self.assertEqual(result.status, "PASS")
+
+    def test_opencode_worktree_adapter_compares_client_and_git_state(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            output = Path(tmp)
+            create_and_validate(output)
+            worktree = output / "worktree-submodule-state" / "worktree-copy"
+            responses = [
+                CompletedProcess(["opencode"], 0, "1.16.2\n", ""),
+                CompletedProcess(
+                    ["git"],
+                    0,
+                    f"worktree {output / 'worktree-submodule-state' / 'main'}\n"
+                    f"worktree {worktree}\n",
+                    "",
+                ),
+                CompletedProcess(["git"], 0, "-abc123 deps/mod\n", ""),
+                CompletedProcess(
+                    ["opencode"],
+                    0,
+                    json.dumps([{"path": "deps/mod", "type": "directory"}]),
+                    "",
+                ),
+            ]
+            with patch("agent_path_topology_litmus.core.shutil.which", return_value="/usr/bin/opencode"), patch(
+                "agent_path_topology_litmus.core.run_command", side_effect=responses
+            ) as run:
+                result = opencode_worktree_submodule(output)
+
+            self.assertEqual(result.status, "PASS")
+            self.assertFalse(result.evidence["client_submodule_file_visible"])
+            self.assertEqual(
+                run.call_args.kwargs["env"]["HOME"],
+                str(output / "opencode-worktree-submodule-home"),
+            )
 
 
 if __name__ == "__main__":

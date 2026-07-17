@@ -39,10 +39,17 @@ Run a local opencode diagnostic for project skill visibility:
 python -m agent_path_topology_litmus run-adapter opencode-debug-skill --output /tmp/agent-path-topology-litmus
 ```
 
+Run a local opencode diagnostic for fresh worktree/submodule visibility:
+
+```bash
+python -m agent_path_topology_litmus run-adapter opencode-worktree-submodule --output /tmp/agent-path-topology-litmus
+```
+
 ## Validation Snapshot
 
 - Baseline topology fixtures: 6/6 passed on macOS with local Git and filesystem checks.
 - opencode 1.16.2: default, configured real, and configured symlinked project skills were all visible through `opencode debug skill --pure`.
+- opencode 1.16.2: the fresh worktree/submodule adapter saw the empty `deps/mod` directory and no `deps/mod/mod.txt` content through `opencode debug file list deps --pure`.
 - Codex CLI 0.133.0: `codex debug prompt-input` ran successfully inside a submodule, saw the submodule rule, and did not see the superproject rule. This is reported as an observed client failure, not a fixture failure.
 
 See `BENCHMARK_RESULTS.md` for commands and `VALIDATION_RESULTS.md` for limitations.
@@ -60,7 +67,7 @@ See `BENCHMARK_RESULTS.md` for commands and `VALIDATION_RESULTS.md` for limitati
 
 - Baseline validation proves only that the fixtures are well formed.
 - Adapter results are client-version-specific and may differ across Codex, opencode, Claude Code, Copilot, Roo, Cursor, Gemini, and future releases.
-- Codex and opencode diagnostics are local, non-model paths. Current opencode diagnostics report a project-skill visibility matrix because opencode 1.16.2 did not surface custom project skills in local validation.
+- Codex and opencode diagnostics are local, non-model paths. The opencode adapters report project-skill visibility and fresh worktree/submodule file-list behavior; they do not prove model or tool behavior inside a submodule.
 - Live model adapters are intentionally not included yet.
 - The tool is not a rule syncer, config generator, prompt package, or static linter.
 - No fixture reads `.env`, private keys, shell history, or unrelated project files.
