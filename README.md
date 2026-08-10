@@ -6,11 +6,29 @@ The first build is intentionally small. It creates harmless disposable fixture r
 
 ## Install
 
-From a checkout, with Python 3.10 or newer:
+Python 3.10 or newer is required. To install the public `v0.2.1` release without cloning the repository:
 
 ```bash
-python -m pip install .
-agent-path-topology-litmus fixtures
+python3 -m pip install "git+https://github.com/itscloud0/agent-path-topology-litmus.git@v0.2.1"
+```
+
+For an isolated command-line install with [uv](https://docs.astral.sh/uv/):
+
+```bash
+uv tool install "git+https://github.com/itscloud0/agent-path-topology-litmus.git@v0.2.1"
+```
+
+For a one-off fixture listing without a persistent install:
+
+```bash
+uvx --from "git+https://github.com/itscloud0/agent-path-topology-litmus.git@v0.2.1" \
+  agent-path-topology-litmus fixtures
+```
+
+For local development from a checkout:
+
+```bash
+python3 -m pip install -e .
 ```
 
 ## Quickstart

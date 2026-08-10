@@ -7,6 +7,7 @@ from pathlib import Path
 from subprocess import CompletedProcess
 from unittest.mock import patch
 
+from agent_path_topology_litmus import __version__
 from agent_path_topology_litmus.cli import main
 from agent_path_topology_litmus.core import (
     codex_prompt_input,
@@ -19,6 +20,9 @@ from agent_path_topology_litmus.core import (
 
 
 class TopologyLitmusTests(unittest.TestCase):
+    def test_package_version_matches_release(self) -> None:
+        self.assertEqual(__version__, "0.2.1")
+
     def test_create_and_validate_all_fixtures(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             results = create_and_validate(Path(tmp))

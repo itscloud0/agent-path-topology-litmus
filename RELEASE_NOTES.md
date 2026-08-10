@@ -1,3 +1,12 @@
+# agent-path-topology-litmus v0.2.1
+
+Fixes the runtime package version and documents checkout-free installation from the tagged GitHub release.
+
+## Included
+
+- Runtime `__version__` now matches the packaged `0.2.1` release.
+- Tagged `pip`, isolated `uv tool`, and one-off `uvx` installation paths.
+
 # agent-path-topology-litmus v0.2.0
 
 Adds a reproducible fresh-worktree/submodule client diagnostic.

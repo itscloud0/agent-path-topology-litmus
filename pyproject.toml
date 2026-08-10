@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "agent-path-topology-litmus"
-version = "0.2.0"
+version = "0.2.1"
 description = "Topology fixtures for checking how coding agents handle symlinks, submodules, worktrees, and path-scoped config."
 readme = "README.md"
 requires-python = ">=3.10"
