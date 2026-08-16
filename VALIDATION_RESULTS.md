@@ -87,3 +87,14 @@ Lifecycle mode: `MAINTAIN` -> `RELEASE`.
 - `git submodule status` marked `deps/mod` uninitialized, and the client listed `deps/mod` as a directory without exposing `deps/mod/mod.txt`.
 - The adapter records the client version, exact Git observations, JSON file listing, failure class, isolated config paths, and the limitation that file listing does not prove model/tool behavior.
 - Local unit, compile, baseline, adapter, package-build/install, diff, and credential-scan checks passed before publication.
+
+## 2026-08-16 Current Client Refresh
+
+Maintenance benchmark on macOS arm64 with Python 3.14.6, Codex CLI 0.144.5, and opencode 1.16.2:
+
+- Unit tests passed: 8/8.
+- Baseline topology fixtures passed: 6/6.
+- Codex `debug prompt-input` returned valid JSON and exposed `SUBMODULE_RULE=1` but not `SUPERPROJECT_RULE=1`; the adapter retained `FAIL` as an observed client failure.
+- opencode `debug skill --pure` passed for default, configured, and configured-symlink project skill paths.
+- opencode `debug file list deps --pure` passed for the fresh worktree/uninitialized-submodule state.
+- No live model calls were made, and the Linux client snapshot in roadmap issue #1 remains pending a Linux client environment.

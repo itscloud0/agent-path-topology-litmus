@@ -52,3 +52,23 @@ The fixture runner replaces six separate manual setups using `readlink`, `realpa
 - Only Codex CLI and opencode have non-live adapters in this release candidate.
 - The worktree/submodule adapter checks opencode's file-list observation against Git state; it does not execute a model or prove tool behavior inside the submodule.
 - The suite does not execute writes through the outside-repository symlink; it reports the canonical target for safe review.
+
+## 2026-08-16 Current Client Refresh
+
+Environment:
+
+- macOS arm64
+- Python 3.14.6
+- Codex CLI 0.144.5
+- opencode 1.16.2
+- no live model calls
+
+Verification:
+
+- Unit tests: 8 passed.
+- Baseline topology fixtures: 6/6 `PASS`.
+- Codex CLI `debug prompt-input`: command returned valid JSON and saw the submodule rule, but not the superproject rule. Result: `FAIL` relative to the expected visibility contract; this is an observed client result, not a fixture failure.
+- opencode `debug skill --pure`: default, configured, and symlinked project-skill variants were visible. Result: `PASS`.
+- opencode `debug file list deps --pure`: the fresh worktree exposed the empty `deps/mod` directory without exposing uninitialized `deps/mod/mod.txt`. Result: `PASS`.
+
+The Linux client diagnostic snapshot in roadmap issue #1 remains unvalidated because this run had no Linux client environment. No Linux result is claimed here.
