@@ -68,7 +68,7 @@ python -m agent_path_topology_litmus run-adapter opencode-worktree-submodule --o
 - Baseline topology fixtures: 6/6 passed on macOS with Python 3.14.6, local Git, and filesystem checks.
 - opencode 1.16.2: default, configured real, and configured symlinked project skills were all visible through `opencode debug skill --pure`.
 - opencode 1.16.2: the fresh worktree/submodule adapter saw the empty `deps/mod` directory and no `deps/mod/mod.txt` content through `opencode debug file list deps --pure`.
-- Codex CLI 0.150.1: `codex debug prompt-input` ran successfully inside a submodule, saw the submodule rule, and did not see the superproject rule. This is reported as an observed client failure, not a fixture failure.
+- Codex CLI 0.151.0: `codex debug prompt-input` ran successfully inside a submodule, saw the submodule rule, and did not see the superproject rule. This is reported as an observed client failure, not a fixture failure.
 
 See `BENCHMARK_RESULTS.md` for commands and `VALIDATION_RESULTS.md` for limitations.
 

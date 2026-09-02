@@ -90,3 +90,21 @@ Verification:
 - The local opencode invocation was not rerun: `opencode --version` was blocked before version output by an `EPERM` cache-path write, so the prior opencode 1.16.2 results remain the last verified opencode evidence.
 
 The Linux client diagnostic snapshot in roadmap issue #1 remains unvalidated because this run had no Linux client environment. No Linux or new opencode result is claimed here.
+
+## 2026-09-02 Codex CLI Refresh
+
+Environment:
+
+- macOS arm64
+- Python 3.14.6
+- Codex CLI 0.151.0
+- no live model calls
+
+Verification:
+
+- Unit tests: 8 passed.
+- Baseline topology fixtures: 6/6 `PASS`.
+- Codex CLI `debug prompt-input`: command returned valid JSON with exit code 0, exposed `SUBMODULE_RULE=1`, and did not expose `SUPERPROJECT_RULE=1`. Result: `FAIL` relative to the expected visibility contract; this is an observed client result, not a fixture failure.
+- The local opencode invocation was not rerun: `opencode --version` attempted a protected cache-path write and failed with `EPERM` before version output, so the prior opencode 1.16.2 results remain the last verified opencode evidence.
+
+The Linux client diagnostic snapshot in roadmap issue #1 remains unvalidated because this run had no Linux client environment. No Linux or new opencode result is claimed here.

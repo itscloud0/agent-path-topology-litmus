@@ -108,3 +108,13 @@ Maintenance benchmark on macOS arm64 with Python 3.14.6 and Codex CLI 0.150.1:
 - Codex `debug prompt-input` returned valid JSON with exit code 0 and exposed `SUBMODULE_RULE=1` but not `SUPERPROJECT_RULE=1`; the adapter retained `FAIL` as an observed client failure.
 - opencode was not rerun because its local invocation attempted a protected cache-path write before printing a version; the prior opencode 1.16.2 result is retained without a new claim.
 - No live model calls were made, and the Linux client snapshot in roadmap issue #1 remains pending a Linux client environment. No Linux or new opencode result is claimed here.
+
+## 2026-09-02 Codex CLI Refresh
+
+Maintenance benchmark on macOS arm64 with Python 3.14.6 and Codex CLI 0.151.0:
+
+- Unit tests passed: 8/8.
+- Baseline topology fixtures passed: 6/6.
+- Codex `debug prompt-input` returned valid JSON with exit code 0 and exposed `SUBMODULE_RULE=1` but not `SUPERPROJECT_RULE=1`; the adapter retained `FAIL` as an observed client failure.
+- opencode was not rerun because its local invocation attempted a protected cache-path write and failed with `EPERM` before printing a version; the prior opencode 1.16.2 result is retained without a new claim.
+- No live model calls were made, and the Linux client snapshot in roadmap issue #1 remains pending a Linux client environment. No Linux or new opencode result is claimed here.
