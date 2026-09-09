@@ -1,3 +1,7 @@
+# Unreleased
+
+- Pinned GitHub Actions dependencies to reviewed immutable commits and added regression coverage against mutable refs.
+
 # agent-path-topology-litmus v0.2.1
 
 Fixes the runtime package version and documents checkout-free installation from the tagged GitHub release.
