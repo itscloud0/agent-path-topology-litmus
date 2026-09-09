@@ -1,5 +1,18 @@
 # VALIDATION_RESULTS
 
+## 2026-09-09 Workflow Reproducibility Hardening
+
+Maintenance verification on macOS arm64 with Python 3.14.6:
+
+- Unit tests passed: 9/9.
+- `PYTHONPATH=src python3 -m compileall -q src tests` passed.
+- GitHub Actions workflow YAML parsed successfully.
+- Local `action-pin-check` audit reported 0 pinning findings across 1 workflow and 3 external action uses.
+- `actions/checkout` is pinned to verified commit `11d5960a326750d5838078e36cf38b85af677262` (v4.4.0).
+- `actions/setup-python` is pinned to verified commit `a26af69be951a213d495a4c3e4e4022e16d87065` (v5.6.0) in both jobs.
+- Public Actions run `34387355950` passed all seven matrix and public-install jobs for commit `e1e7cdb03686b563e0670871c1a53375818603dd`.
+- Focused credential-pattern scan and `git diff --check` passed; no release was created because this is CI-only maintenance.
+
 ## 2026-07-07 Targeted Validation
 
 Lifecycle mode: `SPEC` -> `BUILD`.
