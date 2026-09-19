@@ -1,5 +1,19 @@
 # VALIDATION_RESULTS
 
+## 2026-09-19 Release Asset Onboarding
+
+Maintenance verification on macOS arm64 with Python 3.14.6:
+
+- Unit tests passed: 11/11.
+- `PYTHONPATH=src python3 -m compileall -q src tests` passed.
+- GitHub Actions workflow YAML parsed successfully.
+- Local `action-pin-check` audit reported 0 findings across 1 workflow and 4 external action uses.
+- The public `v0.2.1` wheel downloaded successfully at 11,362 bytes with SHA-256 `10e3d61adf8118407d3b133972f122a332b73950963dc5e0d3f38b062ed0adc5`.
+- The public `v0.2.1` source distribution downloaded successfully at 20,617 bytes with SHA-256 `5ef8b83457cfada72af440ca54b132980c0ab4d153ed767365a58e10092ce0b7`.
+- Both public artifacts installed cleanly in separate Python 3.14.6 virtual environments; each reported version `0.2.1`, listed all six fixtures, and passed baseline validation.
+- README regression tests require the exact wheel and source-distribution URLs, and the public asset CI job installs the documented wheel without checkout.
+- Focused credential-pattern scan and `git diff --check` passed; no release or tag change was created because the existing `v0.2.1` assets are intact.
+
 ## 2026-09-09 Workflow Reproducibility Hardening
 
 Maintenance verification on macOS arm64 with Python 3.14.6:

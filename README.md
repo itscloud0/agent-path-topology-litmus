@@ -6,7 +6,19 @@ The first build is intentionally small. It creates harmless disposable fixture r
 
 ## Install
 
-Python 3.10 or newer is required. To install the public `v0.2.1` release without cloning the repository:
+Python 3.10 or newer is required. For the fastest checkout-free install, download the prebuilt public `v0.2.1` wheel:
+
+```bash
+python3 -m pip install "https://github.com/itscloud0/agent-path-topology-litmus/releases/download/v0.2.1/agent_path_topology_litmus-0.2.1-py3-none-any.whl"
+```
+
+If the wheel is not suitable for your environment, install the matching source distribution:
+
+```bash
+python3 -m pip install "https://github.com/itscloud0/agent-path-topology-litmus/releases/download/v0.2.1/agent_path_topology_litmus-0.2.1.tar.gz"
+```
+
+If release assets are unavailable, install the public release without cloning the repository:
 
 ```bash
 python3 -m pip install "git+https://github.com/itscloud0/agent-path-topology-litmus.git@v0.2.1"
